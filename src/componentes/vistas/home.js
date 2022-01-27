@@ -41,7 +41,7 @@ const Cards = () => {
               <Image
                 style={styles.comisario}
                 resizeMode="cover"
-                source={require("../../../assets/iconos/home.png")}
+                source={require("../../../assets/iconos/comisariaLogo.png")}
               />
             </View>
             <Card.Divider />
@@ -89,7 +89,7 @@ const Cards = () => {
               <Image
                 style={styles.comisario}
                 resizeMode="cover"
-                source={require("../../../assets/iconos/home.png")}
+                source={require("../../../assets/iconos/comisarioLogo.png")}
               />
             </View>
             <Card.Divider />
@@ -116,7 +116,7 @@ const Cards = () => {
               <Image
                 style={styles.comisario}
                 resizeMode="cover"
-                source={require("../../../assets/iconos/home.png")}
+                source={require("../../../assets/iconos/subComisarioLogo.png")}
               />
             </View>
             <Card.Divider />
@@ -142,9 +142,11 @@ const Cards = () => {
             <Card.Divider />
             <Card.Image
               style={{ padding: 0 }}
-              source={{
-                uri: "https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg",
-              }}
+              /*source={{
+                //uri: "https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg",
+                require("../../../assets/iconos/comisariaLogo.png")
+              }}*/
+              source={require("../../../assets/iconos/comisariaLogo.png")}
             />
             <Text style={{ marginBottom: 10 }}>
               {comisariaData[0].info}
