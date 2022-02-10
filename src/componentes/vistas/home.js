@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Text, Card, Button, Icon } from "react-native-elements";
 
-const comisariaData = [
+var comisariaData = [
   {
     Comisaria: "Primera Metropolitana 53",
     Direccion: "Ita Ybate esq Centenario 000",
@@ -31,8 +31,53 @@ const comisarioData = [
 //type CardsComponentsProps = {};
 
 const Cards = () => {
-  return (
-    <>
+  const [masterDataSource, setMasterDataSource] = useState([]);
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("content-type", "application/json");
+
+    var raw = JSON.stringify({
+      ciudad: "Asuncion",
+      barrio: "Santa Maria",
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://node-mysql-isak.herokuapp.com/api/getComisaria",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.result[0][0]);
+
+        setMasterDataSource(result.result[0][0]);
+
+        console.log(comisariaData);
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
+  const vista = ({ item }) => {
+    console.log("item recibido", item);
+    /*comisariaData = [
+      {
+        Comisaria: item[0].comi_descripcion,
+        Direccion: item[0].dire_calle_1 + " " + item[0].dire_calle_2,
+        Ciudad: item[0].Ciudad_id_ciudad,
+        Barrio: item[0].Barrio_id_barrio,
+        Dependencia: item[0].comi_descripcion,
+        telefono: item[0].comi_descripcion,
+        info: item[0].comi_descripcion,
+        //avatar: "https://uifaces.co/our-content/donated/1H_7AxP0.jpg",
+      },
+    ];*/
+    return (
+      // Flat List Item
       <ScrollView>
         <View style={styles.container}>
           <Card style={styles.cardContainer}>
@@ -170,8 +215,9 @@ const Cards = () => {
           </Card>
         </View>
       </ScrollView>
-    </>
-  );
+    );
+  };
+  return <>{vista(masterDataSource)}</>;
 };
 
 const styles = StyleSheet.create({

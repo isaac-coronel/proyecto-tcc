@@ -13,22 +13,57 @@ import {
   FlatList,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-
+//fetch("https://jsonplaceholder.typicode.com/posts")
 const App = () => {
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
+    /*fetch("https://node-mysql-isak.herokuapp.com/api/getMultas", {
+      method: "POST", // or 'PUT'
+      body: JSON.stringify("data"), // data can be `string` or {object}!
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        response.json();
+      })
       .then((responseJson) => {
+        console.log(responseJson);
         setFilteredDataSource(responseJson);
         setMasterDataSource(responseJson);
       })
       .catch((error) => {
         console.error(error);
-      });
+      });*/
+    var myHeaders = new Headers();
+    myHeaders.append("content-type", "application/json");
+
+    var raw = JSON.stringify({
+      ciudad: "Asuncion",
+      barrio: "Santa Maria",
+    });
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://node-mysql-isak.herokuapp.com/api/getMultas/1",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setFilteredDataSource(result.result[0]);
+        setMasterDataSource(result.result[0]);
+      })
+      .catch((error) => console.log("error", error));
   }, []);
 
   const searchFilterFunction = (text) => {
@@ -38,8 +73,9 @@ const App = () => {
       // Filter the masterDataSource
       // Update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
-        const itemData = item.title
-          ? item.title.toUpperCase()
+        //const itemData = item.title
+        const itemData = item.Articulodescripcion
+          ? item.Articulodescripcion.toUpperCase()
           : "".toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -58,9 +94,9 @@ const App = () => {
     return (
       // Flat List Item
       <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-        {item.id}
+        {item.Articuloid}
         {"."}
-        {item.title.toUpperCase()}
+        {item.Articulodescripcion.toUpperCase()}
       </Text>
     );
   };
@@ -80,7 +116,9 @@ const App = () => {
 
   const getItem = (item) => {
     // Function for click on an item
-    alert("Id : " + item.id + " Title : " + item.title);
+    alert(
+      "Id : " + item.Articuloid + " Title : " + item.Articulomonto
+    );
   };
 
   return (
@@ -91,7 +129,7 @@ const App = () => {
           searchIcon={{ size: 24 }}
           onChangeText={(text) => searchFilterFunction(text)}
           onClear={(text) => searchFilterFunction("")}
-          placeholder="Type Here..."
+          placeholder="Buscar..."
           value={search}
         />
         <FlatList
